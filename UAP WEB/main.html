@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <div class="form-container">
+          <form id="purchaseForm">
+            <p>Masukkan Kode:</p>
+            <input class="form" type="text" name="Kode Barang" id="kodeBarang" />
+            <p>Banyaknya Barang:</p>
+            <input class="form" type="number" name="Banyak Barang" id="banyakBarang" />
+          </form>
+        </div>
+        <button class="button" onclick="submitPurchase()">Submit</button>
+        <p id="totalPayment"></p>
+        <button class="button" style="display: none" id="confirmButton" onclick="showPayment()">OK</button>
+      </div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+      function submitPurchase() {
+        const kodeBarang = ['001', '002', '003'];
+        const barang = ['Barang A', 'Barang B', 'Barang C'];
+        const harga = [10000, 20000, 30000];
+
+        const enteredKode = document.getElementById('kodeBarang').value;
+        const banyakBarang = parseInt(document.getElementById('banyakBarang').value);
+
+        const selectedIndexes = enteredKode.split('.').map(code => kodeBarang.indexOf(code.trim()));
+
+        let total = 0;
+        selectedIndexes.forEach(index => {
+          if (index !== -1) {
+            total += banyakBarang * harga[index];
+          }
+        });
+
+        document.getElementById('totalPayment').innerText = `Total pembayaran adalah: Rp ${total.toLocaleString()}`;
+        document.getElementById('confirmButton').style.display = 'block';
+      }
+
+      function showPayment() {
+        const totalPayment = document.getElementById('totalPayment').innerText;
+        const paymentConfirmation = confirm(`${totalPayment}\n\n`);
+        if (paymentConfirmation) {
+          const userInput = prompt('Masukkan uang user:');
+          if (userInput !== null) {
+            const remainingPayment = parseInt(userInput) - parseInt(document.getElementById('totalPayment').innerText.split('Rp ')[1].replace(',', ''));
+            if (remainingPayment >= 0) {
+              alert(`Terima kasih!\n\nTotal kembalian anda adalah: Rp ${remainingPayment.toLocaleString()}`);
+            } else {
+              alert('Maaf, uang yang anda masukkan kurang.');
+            }
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
+
